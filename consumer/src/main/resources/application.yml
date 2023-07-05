@@ -1,0 +1,12 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: consumer
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册中心地址
+        server-addr: 127.0.0.1:8848
+
+

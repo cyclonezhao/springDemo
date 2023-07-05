@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <input type="text" id="messageInput">
+    <button onclick="sendMessage()">Send</button>
+    <div id="response"></div>
+
+    <script>
+        var socket = new WebSocket("ws://localhost:8083/websocket");
+
+        socket.onopen = function(event) {
+            console.log("WebSocket connection opened");
+        };
+
+        socket.onmessage = function(event) {
+            var responseDiv = document.getElementById("response");
+            responseDiv.innerHTML += "<p>Server response: " + event.data + "</p>";
+        };
+
+        socket.onclose = function(event) {
+            console.log("WebSocket connection closed");
+        };
+
+        function sendMessage() {
+            var messageInput = document.getElementById("messageInput");
+            var message = messageInput.value;
+            socket.send(message);
+            messageInput.value = "";
+        }
+    </script>
+</body>
+</html>

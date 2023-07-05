@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.dao.mapper.XmlMapperDemo" >
+<!--    获取订单全部信息-->
+    <select id="getOrder" parameterType="int" resultMap="getOrderRM">
+        select t1.id orderId, t1.number orderNumber,
+        t2.id userId, t2.name userName, t2.age userAge
+        from t_order t1 inner join user t2 on t1.userid=t2.id
+        where t1.id=#{id};
+    </select>
+    <resultMap id="getOrderRM" type="org.example.entity.Order">
+        <id property="id" column="orderId"></id>
+        <result property="number" column="orderNumber"/>
+        <association property="user" javaType="org.example.entity.User">
+            <id property="id" column="userId"/>
+            <result property="name" column="userName"/>
+            <result property="age" column="userAge"/>
+        </association>
+    </resultMap>
+
+<!--    获取订单关联商品名称-->
+    <select id="getRelatedProducts" parameterType="int" resultMap="getRelatedProductsRM">
+        select t1.id orderId, t3.id productId, t3.name productName from t_order t1
+        inner join t_order_product t2 on t1.id=t2.orderId
+        inner join t_product t3 on t2.productId=t3.id
+        where t1.id=1;
+    </select>
+    <resultMap id="getRelatedProductsRM" type="org.example.entity.Order">
+        <id property="id" column="orderId"></id>
+        <collection property="products" ofType="org.example.entity.Product">
+            <id property="id" column="productId"/>
+            <result property="name" column="productName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getOrderLst" resultType="org.example.entity.Order">
+        select * from t_order;
+    </select>
+
+    <select id="getOrderMap" resultType="java.util.HashMap">
+        select * from t_order;
+    </select>
+</mapper>
